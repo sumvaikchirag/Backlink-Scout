@@ -1,0 +1,5 @@
+# Optional JS-rendering fallback (use with --js)
+#   pip install -r requirements-js.txt
+#   playwright install chromium
+-r requirements.txt
+playwright>=1.40.0

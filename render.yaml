@@ -1,0 +1,24 @@
+# Render Blueprint — Backlink Scout
+# https://render.com/docs/blueprint-spec
+#
+# Deploy: push this repo to GitHub/GitLab, then in Render:
+#   New → Blueprint → connect repo → apply
+#
+# Free web services sleep after ~15 min idle and use an ephemeral disk
+# (CSV files are lost on restart). Deep JS / Playwright Chromium is NOT
+# installed on free — leave Deep JS render OFF in production.
+
+services:
+  - type: web
+    name: backlink-scout
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backlink_checker.web:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      - key: PYTHONUNBUFFERED
+        value: "1"
