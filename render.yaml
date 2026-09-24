@@ -5,8 +5,10 @@
 #   New → Blueprint → connect repo → apply
 #
 # Free web services sleep after ~15 min idle and use an ephemeral disk
-# (CSV files are lost on restart). Deep JS / Playwright Chromium is NOT
-# installed on free — leave Deep JS render OFF in production.
+# (CSV files are lost on restart).
+#
+# Playwright browsers must live under the project tree — Render's default
+# cache (/opt/render/.cache) does not persist from build → runtime.
 
 services:
   - type: web
@@ -14,7 +16,7 @@ services:
     runtime: python
     plan: free
     region: oregon
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt && python -m playwright install chromium
     startCommand: uvicorn backlink_checker.web:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /
     envVars:
@@ -22,3 +24,6 @@ services:
         value: "3.12.8"
       - key: PYTHONUNBUFFERED
         value: "1"
+      # Keep Chromium in the deployable project dir (not build-only cache)
+      - key: PLAYWRIGHT_BROWSERS_PATH
+        value: /opt/render/project/src/.playwright

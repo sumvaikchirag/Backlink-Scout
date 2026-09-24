@@ -48,9 +48,9 @@ playwright install chromium
 Notes:
 - Free instances **sleep after ~15 minutes** idle (first request may be slow).
 - Disk is **ephemeral** — CSV files don’t persist across restarts.
-- **Deep JS render / Playwright Chromium is not installed** on free; keep that toggle off.
+- **Deep JS render** installs Chromium during build into `.playwright/` (via `PLAYWRIGHT_BROWSERS_PATH`). Chromium is heavy on free RAM — use it only when you need SPA pages.
 
-Manual (without Blueprint): Web Service → Python → build `pip install -r requirements.txt` → start `uvicorn backlink_checker.web:app --host 0.0.0.0 --port $PORT`.
+Manual (without Blueprint): Web Service → Python → build `pip install -r requirements.txt && python -m playwright install chromium` → start `uvicorn backlink_checker.web:app --host 0.0.0.0 --port $PORT` → set env `PLAYWRIGHT_BROWSERS_PATH=/opt/render/project/src/.playwright`.
 
 ## Web UI (recommended)
 

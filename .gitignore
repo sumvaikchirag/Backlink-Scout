@@ -9,6 +9,7 @@ build/
 venv/
 env/
 .env
+.playwright/
 *.csv
 output/
 .pytest_cache/

@@ -69,7 +69,13 @@ class PlaywrightSession:
             self._playwright = sync_playwright().start()
             self._browser = self._playwright.chromium.launch(
                 headless=True,
-                args=["--disable-blink-features=AutomationControlled"],
+                args=[
+                    "--disable-blink-features=AutomationControlled",
+                    # Required on Render / container hosts (no sandbox privileges)
+                    "--no-sandbox",
+                    "--disable-dev-shm-usage",
+                    "--disable-gpu",
+                ],
             )
         except Exception as exc:  # noqa: BLE001
             self.error = (
